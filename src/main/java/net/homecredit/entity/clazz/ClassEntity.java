@@ -26,10 +26,6 @@ public class ClassEntity implements Entity {
     private final List<MethodEntity> methodEntities = new ArrayList<>();
     private final List<AnnotationEntity> annotationEntities = new ArrayList<>();
 
-    public ClassEntity(@NonNull String name, @NonNull AccessModifier accessModifier, @NonNull ClassType classType, int countOfTabs) {
-        this(name, accessModifier, classType, null, countOfTabs);
-    }
-
     public ClassEntity(@NonNull String name, @NonNull AccessModifier accessModifier, @NonNull ClassType classType, PackageEntity packageEntity, int countOfTabs) {
         this.name = name;
         this.accessModifier = accessModifier;
@@ -71,7 +67,7 @@ public class ClassEntity implements Entity {
     public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append(packageEntity).append(System.lineSeparator()).append(System.lineSeparator());
-        importsToString(builder).append(System.lineSeparator());
+        importsToString(builder);
         annotationsToString(builder);
         builder.append(ConstantStore.getIndent(countOfTabs)).append(AccessModifier.toString(accessModifier));
         modifiersToString(builder).append(ClassType.toString(classType)).append(name).append(WHITESPACE).append(OPENING_BRACE).append(System.lineSeparator());
@@ -88,19 +84,28 @@ public class ClassEntity implements Entity {
         List<ImportEntity> staticImports = importEntities.stream().filter(ImportEntity::isStatic).collect(Collectors.toList());
         List<ImportEntity> staticJavaImports = staticImports.stream().filter(ImportEntity::isJavaImport).collect(Collectors.toList());
 
-        nonStaticImports.forEach(importEntity -> builder.append(importEntity).append(System.lineSeparator()));
-        builder.append(System.lineSeparator());
-        nonStaticJavaImports.forEach(importEntity -> builder.append(importEntity).append(System.lineSeparator()));
-        builder.append(System.lineSeparator());
-        staticImports.forEach(importEntity -> builder.append(importEntity).append(System.lineSeparator()));
-        builder.append(System.lineSeparator());
-        staticJavaImports.forEach(importEntity -> builder.append(importEntity).append(System.lineSeparator()));
+        if (!nonStaticImports.isEmpty()) {
+            nonStaticImports.forEach(importEntity -> builder.append(importEntity).append(System.lineSeparator()));
+            builder.append(System.lineSeparator());
+        }
+        if (!nonStaticJavaImports.isEmpty()) {
+            nonStaticJavaImports.forEach(importEntity -> builder.append(importEntity).append(System.lineSeparator()));
+            builder.append(System.lineSeparator());
+        }
+        if (!staticImports.isEmpty()) {
+            staticImports.forEach(importEntity -> builder.append(importEntity).append(System.lineSeparator()));
+            builder.append(System.lineSeparator());
+        }
+        if (!staticJavaImports.isEmpty()) {
+            staticJavaImports.forEach(importEntity -> builder.append(importEntity).append(System.lineSeparator()));
+            builder.append(System.lineSeparator());
+        }
 
         return builder;
     }
 
     private StringBuilder annotationsToString(StringBuilder builder) {
-        annotationEntities.forEach(annotation -> builder.append(ConstantStore.getIndent(countOfTabs)).append(System.lineSeparator()));
+        annotationEntities.forEach(annotation -> builder.append(ConstantStore.getIndent(countOfTabs)).append(annotation).append(System.lineSeparator()));
         return builder;
     }
 

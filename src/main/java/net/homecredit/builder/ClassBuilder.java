@@ -19,12 +19,8 @@ public class ClassBuilder implements Builder {
     private ClassVariableBuilder lastVariable;
     private MethodBuilder lastMethod;
 
-    public ClassBuilder(String name, AccessModifier accessModifier, ClassType classType, int countOfTabs) {
-        entity = new ClassEntity(name, accessModifier, classType, countOfTabs);
-    }
-
-    public ClassBuilder(String name, AccessModifier accessModifier, ClassType classType, PackageEntity packageEntity, int countOfTabs) {
-        entity = new ClassEntity(name, accessModifier, classType, packageEntity, countOfTabs);
+    public ClassBuilder(String name, AccessModifier accessModifier, ClassType classType, String packageName, int countOfTabs) {
+        entity = new ClassEntity(name, accessModifier, classType, new PackageEntity(packageName), countOfTabs);
     }
 
     @Override
