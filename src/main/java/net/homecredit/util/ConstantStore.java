@@ -11,6 +11,10 @@ public class ConstantStore {
     public static final String COMMA = ",";
     public static final String DOUBLE_QUOTES = "\"";
 
+    public static final String VARIABLE_ERROR = "No variables added";
+    public static final String ANNOTATION_ERROR = "No annotations added";
+    public static final String METHOD_ERROR = "No methods added";
+
     private ConstantStore() {
     }
 

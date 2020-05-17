@@ -10,7 +10,7 @@ import static net.homecredit.util.ConstantStore.COMMA;
 import static net.homecredit.util.ConstantStore.OPENING_BRACKET;
 import static net.homecredit.util.ConstantStore.WHITESPACE;
 
-public class AnnotationEntity {
+public class AnnotationEntity implements Entity {
     private static final String ANNOTATION_PREFIX = "@";
     private static final String EQUAL_SIGN = "=";
 

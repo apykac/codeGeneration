@@ -7,7 +7,6 @@ import net.homecredit.enums.Modifier;
 import net.homecredit.util.ConstantStore;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,7 +14,7 @@ import static net.homecredit.util.ConstantStore.CLOSING_BRACE;
 import static net.homecredit.util.ConstantStore.OPENING_BRACE;
 import static net.homecredit.util.ConstantStore.WHITESPACE;
 
-public class ClassEntity {
+public class ClassEntity implements Entity {
     private final String name;
     private final AccessModifier accessModifier;
     private final ClassType classType;
@@ -28,20 +27,19 @@ public class ClassEntity {
     private final List<AnnotationEntity> annotationEntities = new ArrayList<>();
 
     public ClassEntity(@NonNull String name, @NonNull AccessModifier accessModifier, @NonNull ClassType classType, int countOfTabs) {
-        this(name, accessModifier, classType, null, countOfTabs, new Modifier[0]);
+        this(name, accessModifier, classType, null, countOfTabs);
     }
 
     public ClassEntity(@NonNull String name, @NonNull AccessModifier accessModifier, @NonNull ClassType classType, PackageEntity packageEntity, int countOfTabs) {
-        this(name, accessModifier, classType, packageEntity, countOfTabs, new Modifier[0]);
-    }
-
-    public ClassEntity(@NonNull String name, @NonNull AccessModifier accessModifier, @NonNull ClassType classType, PackageEntity packageEntity, int countOfTabs, Modifier... modifiers) {
         this.name = name;
         this.accessModifier = accessModifier;
         this.classType = classType;
         this.countOfTabs = countOfTabs;
         this.packageEntity = packageEntity;
-        this.modifiers.addAll(Modifier.rightSequence(Arrays.asList(modifiers)));
+    }
+
+    public void addModifier(@NonNull Modifier modifier) {
+        modifiers.add(modifier);
     }
 
     public void addMethod(@NonNull MethodEntity methodEntity) {
@@ -63,6 +61,10 @@ public class ClassEntity {
     public boolean isInnerClass() {
         return packageEntity == null &&
                 importEntities.isEmpty();
+    }
+
+    public int getCountOfTabs() {
+        return countOfTabs;
     }
 
     @Override
@@ -103,12 +105,12 @@ public class ClassEntity {
     }
 
     private StringBuilder modifiersToString(StringBuilder builder) {
-        modifiers.forEach(modifier -> builder.append(Modifier.toString(modifier)));
+        modifiers.stream().sorted(Modifier::compare).forEach(modifier -> builder.append(Modifier.toString(modifier)));
         return builder;
     }
 
     private StringBuilder variablesToString(StringBuilder builder) {
-        variableEntities.forEach(variable -> builder.append(ConstantStore.getIndent(countOfTabs + 1)).append(variable).append(System.lineSeparator()));
+        variableEntities.forEach(variable -> builder.append(variable).append(System.lineSeparator()));
         return builder;
     }
 

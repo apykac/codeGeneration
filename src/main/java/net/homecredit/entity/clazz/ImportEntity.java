@@ -8,7 +8,7 @@ import java.util.Objects;
 import static net.homecredit.util.ConstantStore.OPERATION_END;
 import static net.homecredit.util.ConstantStore.WHITESPACE;
 
-public class ImportEntity implements Comparable<ImportEntity> {
+public class ImportEntity implements Comparable<ImportEntity>, Entity {
     private static final String IMPORT = "import";
     private static final String JAVA_IMPORT_PREFIX = "java.";
 

@@ -5,7 +5,7 @@ import lombok.NonNull;
 import static net.homecredit.util.ConstantStore.OPERATION_END;
 import static net.homecredit.util.ConstantStore.WHITESPACE;
 
-public class PackageEntity {
+public class PackageEntity implements Entity {
     private static final String PACKAGE = "package";
 
     private final String name;

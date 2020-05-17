@@ -1,0 +1,44 @@
+package net.homecredit.builder;
+
+import net.homecredit.entity.clazz.ClassVariableEntity;
+import net.homecredit.enums.AccessModifier;
+import net.homecredit.enums.Modifier;
+import net.homecredit.util.Assert;
+
+import static net.homecredit.util.ConstantStore.ANNOTATION_ERROR;
+
+public class ClassVariableBuilder implements Builder {
+    private final ClassVariableEntity entity;
+
+    private AnnotationBuilder lastAnnotation;
+
+    public ClassVariableBuilder(String name, String type, int countOfTabs) {
+        entity = new ClassVariableEntity(name, type, countOfTabs);
+    }
+
+    public ClassVariableBuilder(String name, String type, AccessModifier accessModifier, int countOfTabs) {
+        entity = new ClassVariableEntity(name, type, accessModifier, countOfTabs);
+    }
+
+    @Override
+    public ClassVariableEntity getEntity() {
+        return entity;
+    }
+
+    public ClassVariableBuilder addModifier(Modifier modifier) {
+        entity.addModifier(modifier);
+        return this;
+    }
+
+    public ClassVariableBuilder addAnnotation(String name) {
+        lastAnnotation = new AnnotationBuilder(name);
+        entity.addAnnotation(lastAnnotation.getEntity());
+        return this;
+    }
+
+    public ClassVariableBuilder addParameterToAnnotation(String name, String value) {
+        Assert.notNull(ANNOTATION_ERROR, lastAnnotation);
+        lastAnnotation.addParameter(name, value);
+        return this;
+    }
+}

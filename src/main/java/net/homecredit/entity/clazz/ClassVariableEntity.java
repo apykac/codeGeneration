@@ -21,9 +21,22 @@ public class ClassVariableEntity extends VariableEntity {
         this.countOfTabs = countOfTabs;
     }
 
-    public ClassVariableEntity(@NonNull String name, @NonNull String type, @NonNull AccessModifier accessModifier, int countOfTabs, Modifier... modifiers) {
-        super(name, type, accessModifier, modifiers);
-        this.countOfTabs = countOfTabs;
+    public void addAnnotation(@NonNull AnnotationEntity annotationEntity) {
+        annotationEntities.add(annotationEntity);
+    }
+
+    public void addModifier(@NonNull Modifier modifier) {
+        modifiers.add(modifier);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return super.equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
     }
 
     @Override

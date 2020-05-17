@@ -5,34 +5,24 @@ import net.homecredit.enums.AccessModifier;
 import net.homecredit.enums.Modifier;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public abstract class VariableEntity implements Comparable<VariableEntity> {
+public abstract class VariableEntity implements Comparable<VariableEntity>, Entity {
     protected final String name;
     protected final String type;
     protected final AccessModifier accessModifier;
     protected final List<Modifier> modifiers = new ArrayList<>();
     protected final List<AnnotationEntity> annotationEntities = new ArrayList<>();
 
-    public VariableEntity(@NonNull String name, @NonNull String type) {
+    protected VariableEntity(@NonNull String name, @NonNull String type) {
         this(name, type, AccessModifier.DEFAULT);
     }
 
-    public VariableEntity(@NonNull String name, @NonNull String type, @NonNull AccessModifier accessModifier) {
-        this(name, type, accessModifier, new Modifier[0]);
-    }
-
-    public VariableEntity(@NonNull String name, @NonNull String type, @NonNull AccessModifier accessModifier, Modifier... modifiers) {
+    protected VariableEntity(@NonNull String name, @NonNull String type, @NonNull AccessModifier accessModifier) {
         this.name = name;
         this.type = type;
         this.accessModifier = accessModifier;
-        this.modifiers.addAll(Modifier.rightSequence(Arrays.asList(modifiers)));
-    }
-
-    public void addAnnotation(@NonNull AnnotationEntity annotationEntity) {
-        annotationEntities.add(annotationEntity);
     }
 
     @Override

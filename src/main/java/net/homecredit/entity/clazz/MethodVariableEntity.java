@@ -9,6 +9,10 @@ public class MethodVariableEntity extends VariableEntity {
         super(name, type);
     }
 
+    public void addAnnotation(@NonNull AnnotationEntity annotationEntity) {
+        annotationEntities.add(annotationEntity);
+    }
+
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();

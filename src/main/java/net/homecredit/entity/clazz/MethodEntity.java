@@ -6,7 +6,6 @@ import net.homecredit.enums.Modifier;
 import net.homecredit.util.ConstantStore;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static net.homecredit.util.ConstantStore.CLOSING_BRACKET;
@@ -15,7 +14,7 @@ import static net.homecredit.util.ConstantStore.OPENING_BRACE;
 import static net.homecredit.util.ConstantStore.OPENING_BRACKET;
 import static net.homecredit.util.ConstantStore.WHITESPACE;
 
-public class MethodEntity {
+public class MethodEntity implements Entity {
     private final String name;
     private final AccessModifier accessModifier;
     private final List<Modifier> modifiers = new ArrayList<>();
@@ -29,14 +28,13 @@ public class MethodEntity {
     }
 
     public MethodEntity(@NonNull String name, @NonNull AccessModifier accessModifier, int countOfTabs) {
-        this(name, accessModifier, countOfTabs, new Modifier[0]);
-    }
-
-    public MethodEntity(@NonNull String name, @NonNull AccessModifier accessModifier, int countOfTabs, Modifier... modifiers) {
         this.name = name;
         this.accessModifier = accessModifier;
-        this.modifiers.addAll(Modifier.rightSequence(Arrays.asList(modifiers)));
         this.countOfTabs = countOfTabs;
+    }
+
+    public void addModifier(@NonNull Modifier modifier) {
+        modifiers.add(modifier);
     }
 
     public void addContent(@NonNull String content) {
@@ -67,7 +65,7 @@ public class MethodEntity {
     }
 
     private StringBuilder modifiersToString(StringBuilder builder) {
-        modifiers.forEach(modifier -> builder.append(Modifier.toString(modifier)).append(" "));
+        modifiers.stream().sorted(Modifier::compare).forEach(modifier -> builder.append(Modifier.toString(modifier)).append(" "));
         return builder;
     }
 
