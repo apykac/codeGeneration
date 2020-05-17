@@ -27,4 +27,25 @@ public enum AccessModifier {
                 return "";
         }
     }
+
+    public static int compare(AccessModifier am1, AccessModifier am2) {
+        return Integer.compare(getModifierWeight(am1), getModifierWeight(am2));
+    }
+
+    private static int getModifierWeight(AccessModifier accessModifier) {
+        if (accessModifier == null) return -1;
+
+        switch (accessModifier) {
+            case PRIVATE:
+                return 4;
+            case DEFAULT:
+                return 3;
+            case PROTECTED:
+                return 2;
+            case PUBLIC:
+                return 1;
+            default:
+                return -1;
+        }
+    }
 }

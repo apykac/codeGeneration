@@ -1,9 +1,11 @@
 package net.homecredit;
 
-import net.homecredit.entity.clazz.PackageEntity;
+import net.homecredit.entity.clazz.AnnotationEntity;
+import net.homecredit.entity.clazz.MethodVariableEntity;
 
 public class CodeGenerationApplication {
     public static void main(String[] args) {
-        PackageEntity packageEntity = new PackageEntity(null);
+        MethodVariableEntity methodVariableEntity = new MethodVariableEntity("name", "String");
+        methodVariableEntity.addAnnotation(new AnnotationEntity("NonNull"));
     }
 }
