@@ -5,6 +5,7 @@ import net.homecredit.enums.AccessModifier;
 import net.homecredit.enums.Modifier;
 import net.homecredit.util.ConstantStore;
 
+import static net.homecredit.util.ConstantStore.EQUAL_SIGN;
 import static net.homecredit.util.ConstantStore.OPERATION_END;
 import static net.homecredit.util.ConstantStore.WHITESPACE;
 
@@ -29,6 +30,13 @@ public class ClassVariableEntity extends VariableEntity {
         modifiers.add(modifier);
     }
 
+    public void setValue(String value) {
+        if (this.value != null) {
+            throw new IllegalArgumentException("Variable value already set");
+        }
+        this.value = value;
+    }
+
     @Override
     public boolean equals(Object o) {
         return super.equals(o);
@@ -43,7 +51,8 @@ public class ClassVariableEntity extends VariableEntity {
     public String toString() {
         StringBuilder builder = new StringBuilder();
         annotationsToString(builder).append(ConstantStore.getIndent(countOfTabs)).append(AccessModifier.toString(accessModifier));
-        modifiersToString(builder).append(type).append(WHITESPACE).append(name).append(OPERATION_END);
+        modifiersToString(builder).append(type).append(WHITESPACE).append(name);
+        valueToString(builder).append(OPERATION_END);
         return builder.toString();
     }
 
@@ -54,6 +63,13 @@ public class ClassVariableEntity extends VariableEntity {
 
     private StringBuilder modifiersToString(StringBuilder builder) {
         modifiers.forEach(modifier -> builder.append(Modifier.toString(modifier)));
+        return builder;
+    }
+
+    private StringBuilder valueToString(StringBuilder builder) {
+        if (value != null) {
+            builder.append(WHITESPACE).append(EQUAL_SIGN).append(WHITESPACE).append(value);
+        }
         return builder;
     }
 }

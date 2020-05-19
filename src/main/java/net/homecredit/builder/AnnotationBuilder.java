@@ -18,4 +18,9 @@ public class AnnotationBuilder implements Builder {
         entity.addParameter(name, value);
         return this;
     }
+
+    public AnnotationBuilder addParameter(String value) {
+        entity.addParameter(value);
+        return this;
+    }
 }

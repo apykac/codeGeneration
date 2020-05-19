@@ -30,6 +30,11 @@ public class ClassVariableBuilder implements Builder {
         return this;
     }
 
+    public ClassVariableBuilder setValue(String value) {
+        entity.setValue(value);
+        return this;
+    }
+
     public ClassVariableBuilder addAnnotation(String name) {
         lastAnnotation = new AnnotationBuilder(name);
         entity.addAnnotation(lastAnnotation.getEntity());

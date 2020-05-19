@@ -15,6 +15,8 @@ public abstract class VariableEntity implements Comparable<VariableEntity>, Enti
     protected final List<Modifier> modifiers = new ArrayList<>();
     protected final List<AnnotationEntity> annotationEntities = new ArrayList<>();
 
+    protected String value;
+
     protected VariableEntity(@NonNull String name, @NonNull String type) {
         this(name, type, AccessModifier.DEFAULT);
     }

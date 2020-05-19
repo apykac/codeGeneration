@@ -50,6 +50,12 @@ public class ClassBuilder implements Builder {
         return this;
     }
 
+    public ClassBuilder addParameterToAnnotation(String value) {
+        Assert.notNull(ANNOTATION_ERROR, lastAnnotation);
+        lastAnnotation.addParameter(value);
+        return this;
+    }
+
     public ClassBuilder addVariable(String name, String type) {
         lastVariable = new ClassVariableBuilder(name, type, entity.getCountOfTabs() + 1);
         entity.addVariable(lastVariable.getEntity());
@@ -65,6 +71,12 @@ public class ClassBuilder implements Builder {
     public ClassBuilder addModifierToVariable(Modifier modifier) {
         Assert.notNull(VARIABLE_ERROR, lastVariable);
         lastVariable.addModifier(modifier);
+        return this;
+    }
+
+    public ClassBuilder setValueToVariable(String value) {
+        Assert.notNull(VARIABLE_ERROR, lastVariable);
+        lastVariable.setValue(value);
         return this;
     }
 
