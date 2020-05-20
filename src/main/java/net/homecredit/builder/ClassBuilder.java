@@ -8,6 +8,8 @@ import net.homecredit.enums.ClassType;
 import net.homecredit.enums.Modifier;
 import net.homecredit.util.Assert;
 
+import java.util.List;
+
 import static net.homecredit.util.ConstantStore.ANNOTATION_ERROR;
 import static net.homecredit.util.ConstantStore.METHOD_ERROR;
 import static net.homecredit.util.ConstantStore.VARIABLE_ERROR;
@@ -18,6 +20,7 @@ public class ClassBuilder implements Builder {
     private AnnotationBuilder lastAnnotation;
     private ClassVariableBuilder lastVariable;
     private MethodBuilder lastMethod;
+    private JavaDocBuilder javaDoc;
 
     public ClassBuilder(String name, AccessModifier accessModifier, ClassType classType, String packageName, int countOfTabs) {
         entity = new ClassEntity(name, accessModifier, classType, new PackageEntity(packageName), countOfTabs);
@@ -35,6 +38,14 @@ public class ClassBuilder implements Builder {
 
     public ClassBuilder addModifier(Modifier modifier) {
         entity.addModifier(modifier);
+        return this;
+    }
+
+    public ClassBuilder setJavaDoc(List<String> content, int countOfTabs) {
+        if (javaDoc != null) {
+            throw new IllegalArgumentException("Java doc already set");
+        }
+        javaDoc = new JavaDocBuilder(content, countOfTabs);
         return this;
     }
 
@@ -59,6 +70,12 @@ public class ClassBuilder implements Builder {
     public ClassBuilder addVariable(String name, String type) {
         lastVariable = new ClassVariableBuilder(name, type, entity.getCountOfTabs() + 1);
         entity.addVariable(lastVariable.getEntity());
+        return this;
+    }
+
+    public ClassBuilder setJavaDocToVariable(List<String> content, int countOfTabs) {
+        Assert.notNull(VARIABLE_ERROR, lastVariable);
+        lastVariable.setJavaDoc(content, countOfTabs);
         return this;
     }
 
@@ -99,6 +116,12 @@ public class ClassBuilder implements Builder {
 
     public ClassBuilder addMethod(String name, AccessModifier accessModifier) {
         lastMethod = new MethodBuilder(name, accessModifier, entity.getCountOfTabs() + 1);
+        return this;
+    }
+
+    public ClassBuilder setJavaDocToMethod(List<String> content, int countOfTabs) {
+        Assert.notNull(METHOD_ERROR, lastMethod);
+        lastMethod.setJavaDoc(content, countOfTabs);
         return this;
     }
 

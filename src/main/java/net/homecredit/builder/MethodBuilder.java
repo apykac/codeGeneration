@@ -5,6 +5,8 @@ import net.homecredit.enums.AccessModifier;
 import net.homecredit.enums.Modifier;
 import net.homecredit.util.Assert;
 
+import java.util.List;
+
 import static net.homecredit.util.ConstantStore.ANNOTATION_ERROR;
 import static net.homecredit.util.ConstantStore.VARIABLE_ERROR;
 
@@ -13,6 +15,7 @@ public class MethodBuilder implements Builder {
 
     private AnnotationBuilder lastAnnotation;
     private MethodVariableBuilder lastArgument;
+    private JavaDocBuilder javaDoc;
 
     public MethodBuilder(String name, int countOfTabs) {
         entity = new MethodEntity(name, AccessModifier.DEFAULT, countOfTabs);
@@ -34,6 +37,14 @@ public class MethodBuilder implements Builder {
 
     public MethodBuilder addContent(String content) {
         entity.addContent(content);
+        return this;
+    }
+
+    public MethodBuilder setJavaDoc(List<String> content, int countOfTabs) {
+        if (javaDoc != null) {
+            throw new IllegalArgumentException("Java doc already set");
+        }
+        javaDoc = new JavaDocBuilder(content, countOfTabs);
         return this;
     }
 

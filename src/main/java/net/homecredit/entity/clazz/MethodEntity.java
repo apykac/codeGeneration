@@ -10,6 +10,7 @@ import java.util.List;
 
 import static net.homecredit.util.ConstantStore.CLOSING_BRACKET;
 import static net.homecredit.util.ConstantStore.COMMA;
+import static net.homecredit.util.ConstantStore.LINE_SEPARATOR;
 import static net.homecredit.util.ConstantStore.OPENING_BRACE;
 import static net.homecredit.util.ConstantStore.OPENING_BRACKET;
 import static net.homecredit.util.ConstantStore.WHITESPACE;
@@ -22,6 +23,8 @@ public class MethodEntity implements Entity {
     private final List<AnnotationEntity> annotationEntities = new ArrayList<>();
     private final List<MethodVariableEntity> arguments = new ArrayList<>();
     private final int countOfTabs;
+
+    private JavaDocEntity javaDocEntity;
 
     public MethodEntity(@NonNull String name, int countOfTabs) {
         this(name, AccessModifier.DEFAULT, countOfTabs);
@@ -49,18 +52,31 @@ public class MethodEntity implements Entity {
         arguments.add(methodVariableEntity);
     }
 
+    public void setJavaDocEntity(JavaDocEntity javaDocEntity) {
+        if (javaDocEntity == null) {
+            throw new IllegalArgumentException("Java doc already set");
+        }
+        this.javaDocEntity = javaDocEntity;
+    }
+
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
+        javaDocToString(builder).append(LINE_SEPARATOR);
         annotationsToString(builder).append(ConstantStore.getIndent(countOfTabs)).append(WHITESPACE).append(AccessModifier.toString(accessModifier));
         modifiersToString(builder).append(name).append(OPENING_BRACKET);
-        argumentsToString(builder).append(CLOSING_BRACKET).append(WHITESPACE).append(OPENING_BRACE).append(System.lineSeparator());
-        contentToString(builder).append(System.lineSeparator()).append(ConstantStore.getIndent(countOfTabs)).append(CLOSING_BRACKET);
+        argumentsToString(builder).append(CLOSING_BRACKET).append(WHITESPACE).append(OPENING_BRACE).append(LINE_SEPARATOR);
+        contentToString(builder).append(LINE_SEPARATOR).append(ConstantStore.getIndent(countOfTabs)).append(CLOSING_BRACKET);
         return builder.toString();
     }
 
+    private StringBuilder javaDocToString(StringBuilder builder) {
+        builder.append(javaDocEntity);
+        return builder;
+    }
+
     private StringBuilder annotationsToString(StringBuilder builder) {
-        annotationEntities.forEach(annotation -> builder.append(ConstantStore.getIndent(countOfTabs)).append(annotation).append(System.lineSeparator()));
+        annotationEntities.forEach(annotation -> builder.append(ConstantStore.getIndent(countOfTabs)).append(annotation).append(LINE_SEPARATOR));
         return builder;
     }
 
@@ -70,7 +86,7 @@ public class MethodEntity implements Entity {
     }
 
     private StringBuilder contentToString(StringBuilder builder) {
-        content.forEach(contentLine -> builder.append(ConstantStore.getIndent(countOfTabs + 1)).append(contentLine).append(System.lineSeparator()));
+        content.forEach(contentLine -> builder.append(ConstantStore.getIndent(countOfTabs + 1)).append(contentLine).append(LINE_SEPARATOR));
         return builder;
     }
 

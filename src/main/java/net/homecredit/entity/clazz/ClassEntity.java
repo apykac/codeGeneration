@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static net.homecredit.util.ConstantStore.CLOSING_BRACE;
+import static net.homecredit.util.ConstantStore.LINE_SEPARATOR;
 import static net.homecredit.util.ConstantStore.OPENING_BRACE;
 import static net.homecredit.util.ConstantStore.WHITESPACE;
 
@@ -25,6 +26,8 @@ public class ClassEntity implements Entity {
     private final List<ClassVariableEntity> variableEntities = new ArrayList<>();
     private final List<MethodEntity> methodEntities = new ArrayList<>();
     private final List<AnnotationEntity> annotationEntities = new ArrayList<>();
+
+    private JavaDocEntity javaDocEntity;
 
     public ClassEntity(@NonNull String name, @NonNull AccessModifier accessModifier, @NonNull ClassType classType, PackageEntity packageEntity, int countOfTabs) {
         this.name = name;
@@ -54,6 +57,13 @@ public class ClassEntity implements Entity {
         importEntities.add(importEntity);
     }
 
+    public void setJavaDocEntity(JavaDocEntity javaDocEntity) {
+        if (javaDocEntity == null) {
+            throw new IllegalArgumentException("Java doc already set");
+        }
+        this.javaDocEntity = javaDocEntity;
+    }
+
     public boolean isInnerClass() {
         return packageEntity == null &&
                 importEntities.isEmpty();
@@ -66,12 +76,13 @@ public class ClassEntity implements Entity {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append(packageEntity).append(System.lineSeparator()).append(System.lineSeparator());
+        builder.append(packageEntity).append(LINE_SEPARATOR).append(LINE_SEPARATOR);
         importsToString(builder);
+        javaDocToString(builder).append(LINE_SEPARATOR);
         annotationsToString(builder);
         builder.append(ConstantStore.getIndent(countOfTabs)).append(AccessModifier.toString(accessModifier));
-        modifiersToString(builder).append(ClassType.toString(classType)).append(name).append(WHITESPACE).append(OPENING_BRACE).append(System.lineSeparator());
-        variablesToString(builder).append(System.lineSeparator());
+        modifiersToString(builder).append(ClassType.toString(classType)).append(name).append(WHITESPACE).append(OPENING_BRACE).append(LINE_SEPARATOR);
+        variablesToString(builder).append(LINE_SEPARATOR);
         methodsToString(builder).append(ConstantStore.getIndent(countOfTabs)).append(CLOSING_BRACE);
 
         return builder.toString();
@@ -85,27 +96,32 @@ public class ClassEntity implements Entity {
         List<ImportEntity> staticJavaImports = staticImports.stream().filter(ImportEntity::isJavaImport).collect(Collectors.toList());
 
         if (!nonStaticImports.isEmpty()) {
-            nonStaticImports.forEach(importEntity -> builder.append(importEntity).append(System.lineSeparator()));
-            builder.append(System.lineSeparator());
+            nonStaticImports.forEach(importEntity -> builder.append(importEntity).append(LINE_SEPARATOR));
+            builder.append(LINE_SEPARATOR);
         }
         if (!nonStaticJavaImports.isEmpty()) {
-            nonStaticJavaImports.forEach(importEntity -> builder.append(importEntity).append(System.lineSeparator()));
-            builder.append(System.lineSeparator());
+            nonStaticJavaImports.forEach(importEntity -> builder.append(importEntity).append(LINE_SEPARATOR));
+            builder.append(LINE_SEPARATOR);
         }
         if (!staticImports.isEmpty()) {
-            staticImports.forEach(importEntity -> builder.append(importEntity).append(System.lineSeparator()));
-            builder.append(System.lineSeparator());
+            staticImports.forEach(importEntity -> builder.append(importEntity).append(LINE_SEPARATOR));
+            builder.append(LINE_SEPARATOR);
         }
         if (!staticJavaImports.isEmpty()) {
-            staticJavaImports.forEach(importEntity -> builder.append(importEntity).append(System.lineSeparator()));
-            builder.append(System.lineSeparator());
+            staticJavaImports.forEach(importEntity -> builder.append(importEntity).append(LINE_SEPARATOR));
+            builder.append(LINE_SEPARATOR);
         }
 
         return builder;
     }
 
+    private StringBuilder javaDocToString(StringBuilder builder) {
+        builder.append(javaDocEntity);
+        return builder;
+    }
+
     private StringBuilder annotationsToString(StringBuilder builder) {
-        annotationEntities.forEach(annotation -> builder.append(ConstantStore.getIndent(countOfTabs)).append(annotation).append(System.lineSeparator()));
+        annotationEntities.forEach(annotation -> builder.append(ConstantStore.getIndent(countOfTabs)).append(annotation).append(LINE_SEPARATOR));
         return builder;
     }
 
@@ -115,12 +131,12 @@ public class ClassEntity implements Entity {
     }
 
     private StringBuilder variablesToString(StringBuilder builder) {
-        variableEntities.forEach(variable -> builder.append(variable).append(System.lineSeparator()));
+        variableEntities.forEach(variable -> builder.append(variable).append(LINE_SEPARATOR));
         return builder;
     }
 
     private StringBuilder methodsToString(StringBuilder builder) {
-        methodEntities.forEach(method -> builder.append(method).append(System.lineSeparator()).append(System.lineSeparator()));
+        methodEntities.forEach(method -> builder.append(method).append(LINE_SEPARATOR).append(LINE_SEPARATOR));
         return builder;
     }
 }

@@ -6,11 +6,14 @@ import net.homecredit.enums.Modifier;
 import net.homecredit.util.ConstantStore;
 
 import static net.homecredit.util.ConstantStore.EQUAL_SIGN;
+import static net.homecredit.util.ConstantStore.LINE_SEPARATOR;
 import static net.homecredit.util.ConstantStore.OPERATION_END;
 import static net.homecredit.util.ConstantStore.WHITESPACE;
 
 public class ClassVariableEntity extends VariableEntity {
     private final int countOfTabs;
+
+    private JavaDocEntity javaDocEntity;
 
     public ClassVariableEntity(@NonNull String name, @NonNull String type, int countOfTabs) {
         super(name, type);
@@ -37,6 +40,13 @@ public class ClassVariableEntity extends VariableEntity {
         this.value = value;
     }
 
+    public void setJavaDocEntity(JavaDocEntity javaDocEntity) {
+        if (javaDocEntity == null) {
+            throw new IllegalArgumentException("Java doc already set");
+        }
+        this.javaDocEntity = javaDocEntity;
+    }
+
     @Override
     public boolean equals(Object o) {
         return super.equals(o);
@@ -50,14 +60,20 @@ public class ClassVariableEntity extends VariableEntity {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
+        javaDocToString(builder).append(LINE_SEPARATOR);
         annotationsToString(builder).append(ConstantStore.getIndent(countOfTabs)).append(AccessModifier.toString(accessModifier));
         modifiersToString(builder).append(type).append(WHITESPACE).append(name);
         valueToString(builder).append(OPERATION_END);
         return builder.toString();
     }
 
+    private StringBuilder javaDocToString(StringBuilder builder) {
+        builder.append(javaDocEntity);
+        return builder;
+    }
+
     private StringBuilder annotationsToString(StringBuilder builder) {
-        annotationEntities.forEach(annotation -> builder.append(ConstantStore.getIndent(countOfTabs)).append(annotation).append(System.lineSeparator()));
+        annotationEntities.forEach(annotation -> builder.append(ConstantStore.getIndent(countOfTabs)).append(annotation).append(LINE_SEPARATOR));
         return builder;
     }
 
