@@ -1,6 +1,6 @@
 package net.homecredit;
 
-import net.homecredit.builder.ClassBuilder;
+import net.homecredit.builder.clazz.ClassBuilder;
 import net.homecredit.enums.AccessModifier;
 import net.homecredit.enums.ClassType;
 import net.homecredit.enums.Modifier;

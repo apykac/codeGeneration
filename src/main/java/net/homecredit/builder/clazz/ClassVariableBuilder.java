@@ -1,4 +1,4 @@
-package net.homecredit.builder;
+package net.homecredit.builder.clazz;
 
 import net.homecredit.entity.clazz.ClassVariableEntity;
 import net.homecredit.enums.AccessModifier;

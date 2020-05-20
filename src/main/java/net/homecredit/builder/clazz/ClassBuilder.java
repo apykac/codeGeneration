@@ -1,4 +1,4 @@
-package net.homecredit.builder;
+package net.homecredit.builder.clazz;
 
 import net.homecredit.entity.clazz.ClassEntity;
 import net.homecredit.entity.clazz.ImportEntity;
@@ -41,11 +41,22 @@ public class ClassBuilder implements Builder {
         return this;
     }
 
+    public ClassBuilder addImplement(String interfaceName) {
+        entity.addImplement(interfaceName);
+        return this;
+    }
+
+    public ClassBuilder setExtend(String extend) {
+        entity.setExtend(extend);
+        return this;
+    }
+
     public ClassBuilder setJavaDoc(List<String> content, int countOfTabs) {
         if (javaDoc != null) {
             throw new IllegalArgumentException("Java doc already set");
         }
         javaDoc = new JavaDocBuilder(content, countOfTabs);
+        entity.setJavaDocEntity(javaDoc.getEntity());
         return this;
     }
 

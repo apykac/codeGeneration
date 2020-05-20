@@ -26,8 +26,10 @@ public class ClassEntity implements Entity {
     private final List<ClassVariableEntity> variableEntities = new ArrayList<>();
     private final List<MethodEntity> methodEntities = new ArrayList<>();
     private final List<AnnotationEntity> annotationEntities = new ArrayList<>();
+    private final List<String> implementList = new ArrayList<>();
 
     private JavaDocEntity javaDocEntity;
+    private String extend;
 
     public ClassEntity(@NonNull String name, @NonNull AccessModifier accessModifier, @NonNull ClassType classType, PackageEntity packageEntity, int countOfTabs) {
         this.name = name;
@@ -57,11 +59,22 @@ public class ClassEntity implements Entity {
         importEntities.add(importEntity);
     }
 
+    public void addImplement(@NonNull String interfaceName) {
+        implementList.add(interfaceName);
+    }
+
     public void setJavaDocEntity(JavaDocEntity javaDocEntity) {
         if (javaDocEntity == null) {
             throw new IllegalArgumentException("Java doc already set");
         }
         this.javaDocEntity = javaDocEntity;
+    }
+
+    public void setExtend(String extend) {
+        if (this.extend != null) {
+            throw new IllegalArgumentException("Extend already set");
+        }
+        this.extend = extend;
     }
 
     public boolean isInnerClass() {
